@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: j1o2a3o4
+      POSTGRES_DB: construtora
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - pg-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 80:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@exemplo.com
+      PGADMIN_DEFAULT_PASSWORD: senha_segura
+    networks:
+      - pg-network
+
+volumes:
+  db_data:
+
+networks:
+  pg-network:

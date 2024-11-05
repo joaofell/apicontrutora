@@ -1,13 +1,30 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const userRoutes = require('../apicontrutora/routes/index'); 
-
+const express = require("express");
+const passport = require("passport"); // Adicionar importação
 const app = express();
-const port = 3000;
+const configureApp = require("./config/app");
+const configurePassport = require("./config/passport");
+const routes = require("./routes/index");
+const authRoutes = require("./routes/auth");
 
-app.use(bodyParser.json()); 
-app.use('/', userRoutes);
+// Configuração da aplicação (cors, session, etc)
+configureApp(app);
 
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+// Configuração do passport
+configurePassport(passport);
+
+// Rotas de autenticação
+app.use("/auth", authRoutes);
+
+// Rotas da API
+app.use("/api", routes);
+
+// Tratamento de erros
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Erro interno do servidor" });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

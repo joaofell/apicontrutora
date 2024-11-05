@@ -1,21 +1,15 @@
-const router = require('express').Router();
-const cors = require('cors');
-const fornecedorRoutes = require('./fornecedor');
-const maquinaRoutes = require('./usuario'); 
-const categoriaRoutes = require('./categoria'); 
-const empreendimentoRoutes = require('./empreendimento'); 
-const parcelaRoutes = require('./parcela');
-const despesaRoutes = require('./despesa');
-const receitaRoutes = require('./receita'); 
+const router = require("express").Router();
+const { isAuthenticated } = require("../middlewares/auth");
 
-router.use(cors());
+// Protege todas as rotas da API
+router.use(isAuthenticated);
 
-router.use('/', fornecedorRoutes);
-router.use('/', maquinaRoutes);
-router.use('/', categoriaRoutes);
-router.use('/', empreendimentoRoutes);
-router.use('/', parcelaRoutes);
-router.use('/', despesaRoutes);
-router.use('/', receitaRoutes);
+router.use("/fornecedores", require("./fornecedor"));
+router.use("/usuarios", require("./usuario"));
+router.use("/categorias", require("./categoria"));
+router.use("/empreendimentos", require("./empreendimento"));
+router.use("/parcelas", require("./parcela"));
+router.use("/despesas", require("./despesa"));
+router.use("/receitas", require("./receita"));
 
 module.exports = router;
