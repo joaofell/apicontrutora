@@ -132,7 +132,7 @@ const updateDespesa = async (req, res) => {
 };
 
 const deleteDespesa = async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
   try {
     const result = await pool.query(
       "DELETE FROM despesas WHERE id = $1 RETURNING *",
