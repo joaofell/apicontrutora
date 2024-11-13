@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { isAuthenticated } = require("../middlewares/auth");
 
 // Protege todas as rotas da API
-router.use(isAuthenticated);
+// router.use(isAuthenticated);
 
 router.use("/fornecedores", require("./fornecedor"));
 router.use("/usuarios", require("./usuario"));

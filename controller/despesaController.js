@@ -6,6 +6,7 @@ const getDespesas = async (req, res) => {
       SELECT 
         despesas.id,
         despesas.data_lancamento,
+        despesas.data_pagamento,
         despesas.fornecedor_id,
         despesas.num_nota,
         despesas.preco,
@@ -55,6 +56,7 @@ const getDespesaById = async (req, res) => {
 const createDespesa = async (req, res) => {
   const {
     data_lancamento,
+    data_pagamento,
     categorias_id,
     fornecedor_id,
     num_nota,
@@ -71,9 +73,10 @@ const createDespesa = async (req, res) => {
 
   try {
     const result = await pool.query(
-      "INSERT INTO despesas (data_lancamento, categorias_id, fornecedor_id, num_nota, preco, descricao, empreendimento_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      "INSERT INTO despesas (data_lancamento, data_pagamento, categorias_id, fornecedor_id, num_nota, preco, descricao, empreendimento_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
       [
         data_lancamento,
+        data_pagamento,
         categorias_id,
         fornecedor_id,
         num_nota,
@@ -92,6 +95,7 @@ const updateDespesa = async (req, res) => {
   const id = parseInt(req.params.id);
   const {
     data_lancamento,
+    data_pagamento,
     categorias_id,
     fornecedor_id,
     num_nota,
@@ -108,9 +112,10 @@ const updateDespesa = async (req, res) => {
 
   try {
     const result = await pool.query(
-      "UPDATE despesas SET data_lancamento = $1, categorias_id = $2, fornecedor_id = $3, num_nota = $4, preco = $5, descricao = $6, empreendimento_id = $7 WHERE id = $8 RETURNING *",
+      "UPDATE despesas SET data_lancamento = $1, data_pagamento = $2, categorias_id = $3, fornecedor_id = $4, num_nota = $5, preco = $6, descricao = $7, empreendimento_id = $8 WHERE id = $9 RETURNING *",
       [
         data_lancamento,
+        data_pagamento,
         categorias_id,
         fornecedor_id,
         num_nota,
