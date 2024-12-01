@@ -12,5 +12,6 @@ router.use("/parcelas", require("./parcela"));
 router.use("/despesas", require("./despesa"));
 router.use("/receitas", require("./receita"));
 router.use("/clientes", require("./cliente"));
+router.use("/logs", require("./logs"));
 
 module.exports = router;
