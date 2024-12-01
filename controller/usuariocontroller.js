@@ -42,11 +42,20 @@ const createUser = async (req, res) => {
   const { nome, email, senha, cargo } = req.body;
 
   try {
+    // Log the received data (remove in production)
+    console.log('Received data:', { nome, email, cargo });
+
+    if (!nome || !email || !senha || !cargo) {
+      console.log('Missing fields:', { nome, email, senha, cargo });
+      return res.status(400).json({ error: "Todos os campos são obrigatórios" });
+    }
+
     // Verifica se o email já existe
     const emailCheck = await pool.query(
       "SELECT * FROM usuario WHERE email = $1",
       [email]
     );
+    
     if (emailCheck.rows.length) {
       return res.status(400).json({ error: "Email já cadastrado" });
     }
@@ -55,13 +64,14 @@ const createUser = async (req, res) => {
     const hashedSenha = await bcrypt.hash(senha, SALT_ROUNDS);
 
     const result = await pool.query(
-      "INSERT INTO usuario (nome, email, senha) VALUES ($1, $2, $3) RETURNING id, nome, email",
-      [nome, email, hashedSenha]
+      "INSERT INTO usuario (nome, email, senha, cargo) VALUES ($1, $2, $3, $4) RETURNING id, nome, email, cargo",
+      [nome, email, hashedSenha, cargo]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    res.status(500).json({ error: "Erro ao criar usuário" });
+    console.error('Erro detalhado ao criar usuário:', err);
+    res.status(500).json({ error: "Erro ao criar usuário: " + err.message });
   }
 };
 
