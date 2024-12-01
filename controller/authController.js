@@ -6,7 +6,7 @@ exports.signup = async (req, res) => {
 
   try {
     const { email, password } = req.body;
-
+    
     if (!email || !password) {
       return res.status(400).json({ error: "Email e senha são obrigatórios" });
     }
@@ -56,6 +56,7 @@ exports.getUser = (req, res) => {
     const { id, email, nome, cargo } = req.user;
     res.json({ user: { id, email, nome, cargo } });
   } else {
+    console.log("aewew")
     res.status(401).json({ message: "Não autenticado" });
   }
 };
