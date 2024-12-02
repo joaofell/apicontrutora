@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const cors = require("cors");
+const logger = require("../middlewares/logger"); // Importar o logger
 
 module.exports = (app) => {
   // Middleware básico
@@ -29,4 +30,7 @@ module.exports = (app) => {
   // Inicialização do passport
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Middleware de logger
+  app.use(logger);
 };
