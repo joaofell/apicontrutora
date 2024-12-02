@@ -39,14 +39,17 @@ exports.signup = async (req, res) => {
 exports.login = (req, res) => {
   // Passport já fez a autenticação
   const { id, email, nome, cargo } = req.user;
+  console.log(`Login realizado por: ${email}`);
   res.json({ user: { id, email, nome, cargo } });
 };
 
 exports.logout = (req, res) => {
+  const email = req.user ? req.user.email : 'Desconhecido';
   req.logout((err) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    console.log(`Logout realizado por: ${email}`);
     res.json({ message: "Logout realizado com sucesso" });
   });
 };

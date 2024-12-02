@@ -265,6 +265,38 @@ const deleteReceita = async (req, res) => {
   }
 };
 
+const getReceitasResumo = async (req, res) => {
+  try {
+    const totalQuery = await pool.query(`
+      SELECT 
+        SUM(preco) as total,
+        AVG(preco) as media_mensal,
+        COUNT(*) as quantidade
+      FROM receita
+      WHERE data_lanc >= NOW() - INTERVAL '12 MONTHS'
+    `);
+
+    const historicoQuery = await pool.query(`
+      SELECT 
+        TO_CHAR(data_lanc, 'MM/YYYY') as mes,
+        SUM(preco) as total
+      FROM receita
+      WHERE data_lanc >= NOW() - INTERVAL '12 MONTHS'
+      GROUP BY mes
+      ORDER BY MIN(data_lanc)
+    `);
+
+    res.status(200).json({
+      total: totalQuery.rows[0].total || 0,
+      mediaMensal: totalQuery.rows[0].media_mensal || 0,
+      quantidade: totalQuery.rows[0].quantidade || 0,
+      historicoMensal: historicoQuery.rows
+    });
+  } catch (err) {
+    console.error("Erro ao buscar resumo de receitas:", err);
+    res.status(500).json({ error: "Erro ao buscar resumo de receitas" });
+  }
+};
 
 // Exporta todas as funções
 module.exports = {
@@ -273,4 +305,5 @@ module.exports = {
   createReceita,
   updateReceita,
   deleteReceita,
+  getReceitasResumo
 };
