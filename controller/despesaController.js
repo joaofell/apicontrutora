@@ -3,7 +3,6 @@ const authController = require("../controller/authController");
 const { addLog } = require('./logController');
 
 const getDespesas = async (req, res) => {
-  console.log("aquiii")
   const teste = await(authController.getUser.id)
   console.log(teste)
   try {
